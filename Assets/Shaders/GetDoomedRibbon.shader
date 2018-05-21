@@ -3,6 +3,8 @@
 	Properties
 	{
 		_Audio ("Audio input", Float) = 0
+		[HideInInspector]
+		_AudioTime ("Audio time", Float) = 0
 	}
 
 	SubShader
@@ -32,8 +34,7 @@
 			v2f vert(appdata v)
 			{
 				v2f o;
-				o.vertex = v.vertex;
-				o.vertex.xy *= 2;
+	            o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = v.uv;
 				return o;
 			}
@@ -43,6 +44,7 @@
 			#define TIMESCALE	0.5
 
 			float _Audio;
+			float _AudioTime;
 
 			fixed4 frag(v2f i) : SV_Target
 			{
@@ -51,7 +53,7 @@
 
 				float2 uv = i.uv * 2 - 1;
 
-				float gTime = _Time.y * TIMESCALE + 100;
+				float gTime = _AudioTime * TIMESCALE + 100;
 				float f = 0., g = 0., h = 0.;
 				float2 res = _ScreenParams.xy;
 				float2 mou;
